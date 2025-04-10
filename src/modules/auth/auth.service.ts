@@ -8,8 +8,7 @@ import { LoginReqDto, LoginResDto, SignupReqDto, SignupResDto } from './dtos';
 import { User } from '../user/user.entity';
 import { UserQueryService } from '../user/user.query.service';
 
-import { BadRequestException } from '../../exceptions/bad-request.exception';
-import { UnauthorizedException } from '../../exceptions/unauthorized.exception';
+import { BadRequestException, UnauthorizedException } from '../../exceptions';
 
 @Injectable()
 export class AuthService {
@@ -32,6 +31,8 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, saltOrRounds);
 
     const userPayload: User = {
+      receivedMessages: [],
+      sentMessages: [],
       email,
       password: hashedPassword,
       name,
