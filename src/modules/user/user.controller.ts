@@ -19,7 +19,7 @@ export class UserController {
   @Get('me')
   async getFullAccess(@GetUser() user: User): Promise<GetProfileResDto> {
     this.logger.debug(`User ${user.email} requested their profile`);
-    //Retorno del usuario logeado
+    // Retorno del usuario logeado
     return {
       message: 'Profile retrieved successfully',
       user,
