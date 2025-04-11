@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        color: #333;
+      }
+      .header {
+        color: #2563eb;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      .otp-container {
+        background: #f3f4f6;
+        padding: 16px;
+        text-align: center;
+        font-size: 24px;
+        letter-spacing: 2px;
+        margin: 16px 0;
+        border-radius: 4px;
+      }
+      .footer {
+        color: #6b7280;
+        font-size: 14px;
+        margin-top: 30px;
+      }
+  body
+    h2.header Verificación de cuenta
+    p Hola #{name},
+    p Tu código de verificación es:
+    .otp-container
+      strong #{otp}
+    p Este código expirará en #{expiration} minutos.
+    p.footer Si no solicitaste este código, por favor ignora este mensaje.

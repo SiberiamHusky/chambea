@@ -8,6 +8,7 @@ import { JwtUserStrategy } from './strategies/jwt-user.strategy';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { MailModule } from '../email/email.module';
 import { UserModule } from '../user/user.module';
 
 @Module({
@@ -26,6 +27,7 @@ import { UserModule } from '../user/user.module';
       }),
     }),
     UserModule,
+    MailModule,
   ],
   providers: [JwtUserStrategy, GoogleStrategy, AuthService],
   controllers: [AuthController],

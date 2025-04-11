@@ -10,6 +10,7 @@ import { User } from '../user/user.entity';
 import { UserQueryService } from '../user/user.query.service';
 
 import { BadRequestException } from '../../exceptions/bad-request.exception';
+import { MailService } from '../email/email.service';
 import { UnauthorizedException } from '../../exceptions/unauthorized.exception';
 
 @Injectable()
@@ -25,6 +26,7 @@ export class AuthService {
   constructor(
     private readonly userQueryService: UserQueryService,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async signup(signupReqDto: SignupReqDto): Promise<SignupResDto> {
@@ -37,6 +39,7 @@ export class AuthService {
 
     const saltOrRounds = this.SALT_ROUNDS;
     const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+    const otp = this.generateOtp();
 
     const userPayload: User = {
       email,
@@ -44,7 +47,7 @@ export class AuthService {
       name,
       verified: false,
       registerCode: null,
-      verificationCode: this.generateOtp(),
+      verificationCode: otp,
       verificationCodeExpiry: this.getOtpExpiration(),
       resetToken: null,
       isActive: false,
@@ -54,6 +57,9 @@ export class AuthService {
     };
 
     await this.userQueryService.create(userPayload);
+
+    // Enviar correo de verificación
+    await this.mailService.sendOtpEmail(email, name, otp.toString());
 
     return {
       message: 'User created successfully',
@@ -104,13 +110,17 @@ export class AuthService {
       throw BadRequestException.RESOURCE_NOT_FOUND(`User with email ${email} not found`);
     }
 
+    const otp = this.generateOtp();
     const updateData = {
-      verificationCode: this.generateOtp(),
+      verificationCode: otp,
       verificationCodeExpiry: this.getOtpExpiration(),
       updatedAt: new Date(),
     };
 
     await this.userQueryService.update(user._id, updateData);
+
+    // enviar el nuevo codigo de verificacion
+    await this.mailService.sendOtpEmail(email, user.name, otp.toString());
   }
 
   async login(loginReqDto: LoginReqDto): Promise<LoginResDto> {
