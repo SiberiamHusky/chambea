@@ -48,4 +48,9 @@ export class UserRepository {
   public createQueryBuilder(alias: string) {
     return this.repository.createQueryBuilder(alias);
   }
+
+  // Agrega este nuevo método para actualización directa
+  async update(id: string, updateData: Partial<User>): Promise<void> {
+    await this.repository.update(id, updateData);
+  }
 }

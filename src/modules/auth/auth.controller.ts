@@ -7,7 +7,9 @@ import { LoginReqDto, LoginResDto, SignupReqDto, SignupResDto } from './dtos';
 
 import { BadRequestException } from '../../exceptions/bad-request.exception';
 import { InternalServerErrorException } from '../../exceptions/internal-server-error.exception';
+import { ResendOtpReqDto } from './dtos/resend-otp.req.dto';
 import { UnauthorizedException } from '../../exceptions/unauthorized.exception';
+import { ValidateOtpReqDto } from './dtos/otp-code.req.dto';
 
 @ApiBadRequestResponse({
   type: BadRequestException,
@@ -53,5 +55,28 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req): Promise<LoginResDto> {
     return this.authService.loginWithGoogle(req.user);
+  }
+
+  // endpoint para verificar el token de autenticación
+  @ApiOkResponse({
+    description: 'OTP validado correctamente',
+  })
+  @HttpCode(200)
+  @Post('validate-otp')
+  async validateOtp(@Body(ValidationPipe) validateOtpReqDto: ValidateOtpReqDto): Promise<{ isValid: boolean }> {
+    const { email, code } = validateOtpReqDto;
+    const isValid = await this.authService.validateOtp(email, code);
+    return { isValid };
+  }
+
+  @ApiOkResponse({
+    description: 'OTP reenviado correctamente',
+  })
+  @HttpCode(200)
+  @Post('resend-otp')
+  async resendOtp(@Body(ValidationPipe) resendOtpReqDto: ResendOtpReqDto): Promise<{ message: string }> {
+    const { email } = resendOtpReqDto;
+    await this.authService.resendOtp(email);
+    return { message: 'OTP resent successfully' };
   }
 }
