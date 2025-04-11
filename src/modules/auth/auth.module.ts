@@ -8,7 +8,7 @@ import { JwtUserStrategy } from './strategies/jwt-user.strategy';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { MailModule } from '../email/email.module';
+import { MailModule } from '../mail/email.module';
 import { UserModule } from '../user/user.module';
 
 @Module({

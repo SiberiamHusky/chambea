@@ -10,7 +10,7 @@ import { User } from '../user/user.entity';
 import { UserQueryService } from '../user/user.query.service';
 
 import { BadRequestException } from '../../exceptions/bad-request.exception';
-import { MailService } from '../email/email.service';
+import { MailService } from '../mail/email.service';
 import { UnauthorizedException } from '../../exceptions/unauthorized.exception';
 
 @Injectable()

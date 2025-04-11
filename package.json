@@ -26,6 +26,7 @@
   "author": "Victor Alarcon",
   "license": "MIT",
   "dependencies": {
+    "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.3.8",
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.3.8",
