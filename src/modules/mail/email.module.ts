@@ -1,9 +1,9 @@
+// src/modules/mail/mail.module.ts
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { join } from 'path';
-
 import { MailService } from './email.service';
 
 @Module({
@@ -13,22 +13,22 @@ import { MailService } from './email.service';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         transport: {
-          host: config.get<string>('SMTP_HOST'),
-          port: config.get<number>('SMTP_PORT'),
-          secure: config.get<boolean>('SMTP_SECURE', false),
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
           auth: {
-            user: config.get<string>('SMTP_USER'),
-            pass: config.get<string>('SMTP_PASSWORD'),
+            user: config.get<string>('GMAIL_USER'),
+            pass: config.get<string>('GMAIL_APP_PASSWORD'),
           },
           tls: {
-            rejectUnauthorized: config.get<boolean>('SMTP_TLS_REJECT_UNAUTHORIZED', false),
+            rejectUnauthorized: false,
           },
         },
         defaults: {
-          from: `"${config.get<string>('SMTP_FROM_NAME', 'No Reply')}" <${config.get<string>('SMTP_FROM_EMAIL')}>`,
+          from: `"${config.get('MAIL_FROM_NAME')}" <${config.get('GMAIL_USER')}>`,
         },
         template: {
-          dir: join(__dirname, 'templates'),
+          dir: join(process.cwd(), 'src', 'templates'), // Ruta absoluta desde src
           adapter: new PugAdapter(),
           options: {
             strict: true,

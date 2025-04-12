@@ -2,36 +2,30 @@ doctype html
 html
   head
     style.
-      body {
-        font-family: Arial, sans-serif;
-        max-width: 600px;
-        margin: 0 auto;
-        color: #333;
+      body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+      .header { color: #EA4335; font-size: 24px; margin-bottom: 20px; }
+      .otp-code { 
+        background: #f5f5f5; 
+        padding: 15px; 
+        text-align: center; 
+        font-size: 24px; 
+        margin: 20px 0; 
+        border-radius: 4px; 
+        font-weight: bold;
       }
-      .header {
-        color: #2563eb;
-        font-size: 24px;
-        margin-bottom: 20px;
-      }
-      .otp-container {
-        background: #f3f4f6;
-        padding: 16px;
-        text-align: center;
-        font-size: 24px;
-        letter-spacing: 2px;
-        margin: 16px 0;
-        border-radius: 4px;
-      }
-      .footer {
-        color: #6b7280;
-        font-size: 14px;
-        margin-top: 30px;
+      .footer { 
+        margin-top: 30px; 
+        font-size: 12px; 
+        color: #666; 
+        border-top: 1px solid #eee; 
+        padding-top: 10px;
       }
   body
     h2.header Verificación de cuenta
     p Hola #{name},
-    p Tu código de verificación es:
-    .otp-container
-      strong #{otp}
+    p Para completar tu registro, ingresa el siguiente código de verificación:
+    .otp-code #{otp}
     p Este código expirará en #{expiration} minutos.
-    p.footer Si no solicitaste este código, por favor ignora este mensaje.
+    p.footer
+      | Este email fue enviado por #{appName}. 
+      | Si no solicitaste este código, por favor ignora este mensaje.
