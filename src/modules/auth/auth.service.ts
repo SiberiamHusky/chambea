@@ -59,7 +59,16 @@ export class AuthService {
     await this.userQueryService.create(userPayload);
 
     // Enviar correo de verificación
-    await this.mailService.sendOtpEmail(email, name, otp.toString());
+    await this.mailService.sendEmail({
+      to: email,
+      subject: 'Welcome to the realm of NestJS',
+      template: 'otp-email',
+      context: {
+        name,
+        otp,
+        expiration: this.OTP_EXPIRATION_MINUTES, // Minutos
+      },
+    });
 
     return {
       message: 'User created successfully',
@@ -120,7 +129,7 @@ export class AuthService {
     await this.userQueryService.update(user._id, updateData);
 
     // enviar el nuevo codigo de verificacion
-    await this.mailService.sendOtpEmail(email, user.name, otp.toString());
+    // await this.mailService.sendOtpEmail(email, user.name, otp.toString());
   }
 
   async login(loginReqDto: LoginReqDto): Promise<LoginResDto> {
