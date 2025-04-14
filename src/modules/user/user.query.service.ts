@@ -44,4 +44,26 @@ export class UserQueryService {
     }
     return newUser;
   }
+
+  // Actualiza un usuario (versión simple)
+  async update(id: string, updateData: Partial<User>): Promise<void> {
+    try {
+      await this.userRepository.update(id, updateData);
+    } catch (error) {
+      throw InternalServerErrorException.INTERNAL_SERVER_ERROR(error);
+    }
+  }
+
+  // O versión que retorna el usuario actualizado
+  async updateAndReturn(id: string, updateData: Partial<User>): Promise<User> {
+    try {
+      const updatedUser = await this.userRepository.findByIdAndUpdate(id, updateData);
+      if (!updatedUser) {
+        throw new Error('User not found');
+      }
+      return updatedUser;
+    } catch (error) {
+      throw InternalServerErrorException.INTERNAL_SERVER_ERROR(error);
+    }
+  }
 }

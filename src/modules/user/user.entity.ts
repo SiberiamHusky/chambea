@@ -1,5 +1,5 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 import { DatabaseCollectionNames } from '../../shared/enums';
 
@@ -72,5 +72,4 @@ export class User {
   })
   @UpdateDateColumn()
   updatedAt: Date;
-
 }

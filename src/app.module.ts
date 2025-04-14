@@ -23,10 +23,10 @@ import {
   ValidationExceptionFilter,
 } from './filters';
 import { AuthModule } from './modules/auth/auth.module';
+import { GoogleStrategy } from './modules/auth/strategies/google.strategy';
 import { User } from './modules/user/user.entity';
 import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
-import { GoogleStrategy } from './modules/auth/strategies/google.strategy';
 
 // Import other modules
 

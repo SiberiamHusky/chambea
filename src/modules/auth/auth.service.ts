@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { addMinutes } from 'date-fns';
 
 import { JwtUserPayload } from './interfaces/jwt-user-payload.interface';
 import { LoginReqDto, LoginResDto, SignupReqDto, SignupResDto } from './dtos';
@@ -9,15 +10,23 @@ import { User } from '../user/user.entity';
 import { UserQueryService } from '../user/user.query.service';
 
 import { BadRequestException } from '../../exceptions/bad-request.exception';
+import { MailService } from '../mail/email.service';
 import { UnauthorizedException } from '../../exceptions/unauthorized.exception';
 
 @Injectable()
 export class AuthService {
   private readonly SALT_ROUNDS = 10;
 
+  private readonly OTP_EXPIRATION_MINUTES = 15;
+
+  private readonly OTP_MIN = 100000;
+
+  private readonly OTP_MAX = 999999;
+
   constructor(
     private readonly userQueryService: UserQueryService,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async signup(signupReqDto: SignupReqDto): Promise<SignupResDto> {
@@ -30,17 +39,18 @@ export class AuthService {
 
     const saltOrRounds = this.SALT_ROUNDS;
     const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+    const otp = this.generateOtp();
 
     const userPayload: User = {
       email,
       password: hashedPassword,
       name,
-      verified: true,
-      registerCode: this.generateCode(),
-      verificationCode: null,
-      verificationCodeExpiry: null,
+      verified: false,
+      registerCode: null,
+      verificationCode: otp,
+      verificationCodeExpiry: this.getOtpExpiration(),
       resetToken: null,
-      isActive: true,
+      isActive: false,
       createdAt: new Date(),
       updatedAt: new Date(),
       _id: undefined,
@@ -48,15 +58,78 @@ export class AuthService {
 
     await this.userQueryService.create(userPayload);
 
+    // Enviar correo de verificación
+    await this.mailService.sendEmail({
+      to: email,
+      subject: 'Welcome to the realm of NestJS',
+      template: 'otp-email',
+      context: {
+        name,
+        otp,
+        expiration: this.OTP_EXPIRATION_MINUTES, // Minutos
+      },
+    });
+
     return {
       message: 'User created successfully',
     };
   }
 
-  generateCode(): number {
-    const OTP_MIN = 100000;
-    const OTP_MAX = 999999;
-    return Math.floor(Math.random() * (OTP_MAX - OTP_MIN + 1)) + OTP_MIN;
+  generateOtp(): number {
+    return Math.floor(Math.random() * (this.OTP_MAX - this.OTP_MIN + 1)) + this.OTP_MIN;
+  }
+
+  getOtpExpiration(): Date {
+    return addMinutes(new Date(), this.OTP_EXPIRATION_MINUTES);
+  }
+
+  async validateOtp(email: string, code: number): Promise<boolean> {
+    const user = await this.userQueryService.findByEmail(email);
+
+    if (!user || !user.verificationCode || !user.verificationCodeExpiry) {
+      return false;
+    }
+
+    // Verificar si el código coincide y no ha expirado
+    const isValid = user.verificationCode === code && new Date() < user.verificationCodeExpiry;
+
+    // Limpiar el OTP después de la validación (incluso si es inválido)
+    if (isValid) {
+      await this.clearOtp(user._id);
+    }
+
+    return isValid;
+  }
+
+  async clearOtp(userId: string): Promise<void> {
+    const updateData = {
+      verificationCode: null,
+      verificationCodeExpiry: null,
+      verified: true,
+      isActive: true,
+      updatedAt: new Date(),
+    };
+
+    await this.userQueryService.update(userId, updateData);
+  }
+
+  async resendOtp(email: string): Promise<void> {
+    const user = await this.userQueryService.findByEmail(email);
+    if (!user) {
+      throw BadRequestException.RESOURCE_NOT_FOUND(`User with email ${email} not found`);
+    }
+
+    const otp = this.generateOtp();
+    const updateData = {
+      verificationCode: otp,
+      verificationCodeExpiry: this.getOtpExpiration(),
+      updatedAt: new Date(),
+    };
+
+    await this.userQueryService.update(user._id, updateData);
+
+    // enviar el nuevo codigo de verificacion
+    // await this.mailService.sendOtpEmail(email, user.name, otp.toString());
   }
 
   async login(loginReqDto: LoginReqDto): Promise<LoginResDto> {
