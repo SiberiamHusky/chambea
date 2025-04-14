@@ -23,6 +23,7 @@ import {
   ValidationExceptionFilter,
 } from './filters';
 import { AuthModule } from './modules/auth/auth.module';
+import { ChatModule } from './modules/chat/chat.module';
 import { GoogleStrategy } from './modules/auth/strategies/google.strategy';
 import { User } from './modules/user/user.entity';
 import { UserController } from './modules/user/user.controller';
@@ -57,6 +58,7 @@ import { UserModule } from './modules/user/user.module';
     // Import other modules
     AuthModule,
     UserModule,
+    ChatModule,
   ],
   controllers: [AppController, UserController],
   providers: [

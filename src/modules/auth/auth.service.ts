@@ -9,9 +9,8 @@ import { LoginReqDto, LoginResDto, SignupReqDto, SignupResDto } from './dtos';
 import { User } from '../user/user.entity';
 import { UserQueryService } from '../user/user.query.service';
 
-import { BadRequestException } from '../../exceptions/bad-request.exception';
+import { BadRequestException, UnauthorizedException } from '../../exceptions';
 import { MailService } from '../mail/email.service';
-import { UnauthorizedException } from '../../exceptions/unauthorized.exception';
 
 @Injectable()
 export class AuthService {
@@ -42,6 +41,8 @@ export class AuthService {
     const otp = this.generateOtp();
 
     const userPayload: User = {
+      receivedMessages: [],
+      sentMessages: [],
       email,
       password: hashedPassword,
       name,

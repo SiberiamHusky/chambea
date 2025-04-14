@@ -5,10 +5,8 @@ import { Body, Controller, Get, HttpCode, Post, Req, UseGuards, ValidationPipe }
 import { AuthService } from './auth.service';
 import { LoginReqDto, LoginResDto, SignupReqDto, SignupResDto } from './dtos';
 
-import { BadRequestException } from '../../exceptions/bad-request.exception';
-import { InternalServerErrorException } from '../../exceptions/internal-server-error.exception';
+import { BadRequestException, InternalServerErrorException, UnauthorizedException } from '../../exceptions';
 import { ResendOtpReqDto } from './dtos/resend-otp.req.dto';
-import { UnauthorizedException } from '../../exceptions/unauthorized.exception';
 import { ValidateOtpReqDto } from './dtos/otp-code.req.dto';
 
 @ApiBadRequestResponse({

@@ -1,6 +1,8 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
+// eslint-disable-next-line import/no-cycle
+import { ChatMessage } from '../chat/chat-message.entity';
 import { DatabaseCollectionNames } from '../../shared/enums';
 
 @Index(['email', 'isActive'])
@@ -72,4 +74,10 @@ export class User {
   })
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => ChatMessage, (message) => message.sender)
+  sentMessages: ChatMessage[];
+
+  @OneToMany(() => ChatMessage, (message) => message.receiver)
+  receivedMessages: ChatMessage[];
 }
