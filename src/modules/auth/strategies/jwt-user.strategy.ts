@@ -25,11 +25,8 @@ export class JwtUserStrategy extends PassportStrategy(Strategy, 'authUser') {
     if (!user) {
       throw UnauthorizedException.UNAUTHORIZED_ACCESS();
     }
-    if (!user.verified) {
+    if (!user.email_verified) {
       throw UnauthorizedException.USER_NOT_VERIFIED();
-    }
-    if (payload.code !== user.registerCode) {
-      throw UnauthorizedException.REQUIRED_RE_AUTHENTICATION();
     }
     delete user.password; // remove password from the user object
     return user;

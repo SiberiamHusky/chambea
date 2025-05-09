@@ -6,7 +6,7 @@ import { addMinutes } from 'date-fns';
 import { JwtUserPayload } from './interfaces/jwt-user-payload.interface';
 import { LoginReqDto, LoginResDto, SignupReqDto, SignupResDto } from './dtos';
 
-import { User } from '../user/user.entity';
+import { AccountStatus, User, UserType } from '../user/user.entity';
 import { UserQueryService } from '../user/user.query.service';
 
 import { BadRequestException, UnauthorizedException } from '../../exceptions';
@@ -29,7 +29,7 @@ export class AuthService {
   ) {}
 
   async signup(signupReqDto: SignupReqDto): Promise<SignupResDto> {
-    const { email, password, name } = signupReqDto;
+    const { email, password, first_name, last_name, phone } = signupReqDto;
 
     const user = await this.userQueryService.findByEmail(email);
     if (user) {
@@ -44,14 +44,17 @@ export class AuthService {
       receivedMessages: [],
       sentMessages: [],
       email,
+      phone,
       password: hashedPassword,
-      name,
-      verified: false,
-      registerCode: null,
+      user_type: UserType.PENDING,
+      first_name,
+      last_name,
+      profile_picture_url: null,
+      email_verified: false,
+      phone_verified: false,
       verificationCode: otp,
       verificationCodeExpiry: this.getOtpExpiration(),
-      resetToken: null,
-      isActive: false,
+      account_status: AccountStatus.PENDING_VERIFICATION,
       createdAt: new Date(),
       updatedAt: new Date(),
       _id: undefined,
@@ -62,12 +65,13 @@ export class AuthService {
     // Enviar correo de verificación
     await this.mailService.sendEmail({
       to: email,
-      subject: 'Welcome to the realm of NestJS',
+      subject: 'Codigo de verificación',
       template: 'otp-email',
       context: {
-        name,
+        first_name,
+        last_name,
         otp,
-        expiration: this.OTP_EXPIRATION_MINUTES, // Minutos
+        expiration: this.OTP_EXPIRATION_MINUTES,
       },
     });
 
@@ -106,8 +110,8 @@ export class AuthService {
     const updateData = {
       verificationCode: null,
       verificationCodeExpiry: null,
-      verified: true,
-      isActive: true,
+      email_verified: true,
+      account_status: AccountStatus.ACTIVE,
       updatedAt: new Date(),
     };
 
@@ -149,7 +153,6 @@ export class AuthService {
     const payload: JwtUserPayload = {
       user: user._id,
       email: user.email,
-      code: user.registerCode,
     };
     const accessToken = await this.jwtService.signAsync(payload);
 
@@ -166,7 +169,6 @@ export class AuthService {
     const payload: JwtUserPayload = {
       user: user._id,
       email: user.email,
-      code: user.registerCode,
     };
     const accessToken = await this.jwtService.signAsync(payload);
     delete user.password;
