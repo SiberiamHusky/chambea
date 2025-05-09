@@ -1,11 +1,24 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 // eslint-disable-next-line import/no-cycle
 import { ChatMessage } from '../chat/chat-message.entity';
 import { DatabaseCollectionNames } from '../../shared/enums';
 
-@Index(['email', 'isActive'])
+export enum UserType {
+  WORKER = 'worker',
+  EMPLOYER = 'employer',
+  PENDING = 'pending',
+}
+
+export enum AccountStatus {
+  PENDING_VERIFICATION = 'pending_verification',
+  ACTIVE = 'active',
+  SUSPENDED = 'suspended',
+  INACTIVE = 'inactive',
+}
+
+@Index(['email'])
 @Entity({ name: DatabaseCollectionNames.USER })
 export class User {
   @ApiProperty({
@@ -27,18 +40,46 @@ export class User {
   password?: string;
 
   @ApiProperty({
-    description: 'El nombre completo del usuario',
-    example: 'John Doe',
+    description: 'El tipo de usuario',
+    example: 'worker',
   })
-  @Column({ nullable: true })
-  name?: string;
+  @Column({ default: UserType.PENDING })
+  user_type: UserType;
 
   @ApiProperty({
-    description: 'Indica si el usuario ha verificado su dirección de correo',
+    description: 'El nombre del usuario',
+    example: 'Joc',
+  })
+  @Column()
+  first_name?: string;
+
+  @ApiProperty({
+    description: 'El apellido del usuario',
+    example: 'Ferreira',
+  })
+  @Column({ nullable: true })
+  last_name?: string;
+
+  @ApiProperty({
+    description: 'El número de teléfono del usuario',
+    example: '04243460227',
+  })
+  @Column({ nullable: true })
+  phone?: string;
+
+  @ApiProperty({
+    description: 'Url de la foto de perfil del usuario',
+    example: 'Ferreira',
+  })
+  @Column({ nullable: true })
+  profile_picture_url?: string;
+
+  @ApiProperty({
+    description: 'Indica el status de la cuenta del usuario',
     example: true,
   })
-  @Column({ default: false })
-  verified: boolean;
+  @Column({ default: AccountStatus.PENDING_VERIFICATION })
+  account_status: AccountStatus;
 
   @ApiHideProperty()
   @Column({ nullable: true })
@@ -48,20 +89,19 @@ export class User {
   @Column({ type: 'timestamp', nullable: true })
   verificationCodeExpiry?: Date;
 
-  @ApiHideProperty()
-  @Column({ nullable: true })
-  resetToken?: string;
-
-  @ApiHideProperty()
-  @Column({ nullable: true })
-  registerCode?: number;
-
   @ApiProperty({
-    description: 'Indica si el usuario está activo',
+    description: 'Indica si el usuario ha verificado su dirección de correo',
     example: true,
   })
-  @Column({ default: true })
-  isActive: boolean;
+  @Column({ default: false })
+  email_verified: boolean;
+
+  @ApiProperty({
+    description: 'Indica si el usuario ha verificado su numero de telefono',
+    example: true,
+  })
+  @Column({ default: false })
+  phone_verified: boolean;
 
   @ApiProperty({
     description: 'Fecha de creación',
@@ -74,6 +114,13 @@ export class User {
   })
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ApiProperty({
+    description: 'Fecha del último inicio de sesión',
+    example: '2025-04-14T12:34:56.789Z',
+  })
+  @Column({ type: 'timestamp', nullable: true })
+  last_login_date?: Date;
 
   @OneToMany(() => ChatMessage, (message) => message.sender)
   sentMessages: ChatMessage[];

@@ -1,7 +1,7 @@
+import { AccountStatus, User } from 'src/modules/user/user.entity';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
-import { User } from 'src/modules/user/user.entity';
 import { UserQueryService } from '../../user/user.query.service';
 
 @Injectable()
@@ -23,10 +23,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       if (!user) {
         user = new User();
         user.email = email;
-        user.name = `${name.givenName} ${name.familyName}`;
-        user.verified = true;
+        user.first_name = `${name.givenName} ${name.familyName}`;
+        user.email_verified = true;
+        user.account_status = AccountStatus.ACTIVE;
         // Si lo requieres, genera un registerCode para la sesión (para compatibilidad con la validación JWT)
-        user.registerCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
         user = await this.userQueryService.create(user);
       }
       done(null, user);
