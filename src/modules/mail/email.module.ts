@@ -4,6 +4,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { join } from 'path';
+// eslint-disable-next-line sort-imports-es6-autofix/sort-imports-es6
 import { MailService } from './email.service';
 
 @Module({

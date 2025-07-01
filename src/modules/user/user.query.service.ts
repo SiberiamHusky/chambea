@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 // eslint-disable-next-line sort-imports-es6-autofix/sort-imports-es6
+import { AccountStatus, User, UserType } from './user.entity';
 import { InternalServerErrorException } from '../../exceptions';
-import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -65,5 +65,27 @@ export class UserQueryService {
     } catch (error) {
       throw InternalServerErrorException.INTERNAL_SERVER_ERROR(error);
     }
+  }
+
+  async selectUserRole(userId: string, role: UserType): Promise<{ message: string }> {
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado.');
+    }
+    if (user.user_type) {
+      throw new BadRequestException('El usuario ya tiene un rol asignado.');
+    }
+    if (user.account_status !== AccountStatus.PENDING_ROLE_SELECTION) {
+      throw new BadRequestException('El usuario no está autorizado para seleccionar rol.');
+    }
+
+    await this.userRepository.update(userId, {
+      user_type: role,
+      account_status: role === UserType.WORKER ? AccountStatus.PENDING_VERIFICATION : AccountStatus.ACTIVE,
+      updatedAt: new Date(),
+    });
+
+    return { message: `Rol seleccionado correctamente: ${role}` };
   }
 }

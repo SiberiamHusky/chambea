@@ -12,6 +12,7 @@ export enum UserType {
 }
 
 export enum AccountStatus {
+  PENDING_ROLE_SELECTION = 'pending_role_selection',
   PENDING_VERIFICATION = 'pending_verification',
   ACTIVE = 'active',
   SUSPENDED = 'suspended',

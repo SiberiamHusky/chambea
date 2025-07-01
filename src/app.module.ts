@@ -28,6 +28,7 @@ import { GoogleStrategy } from './modules/auth/strategies/google.strategy';
 import { User } from './modules/user/user.entity';
 import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
+import { WorkerModule } from './modules/worker/worker.module';
 
 // Import other modules
 
@@ -59,6 +60,7 @@ import { UserModule } from './modules/user/user.module';
     AuthModule,
     UserModule,
     ChatModule,
+    WorkerModule,
   ],
   controllers: [AppController, UserController],
   providers: [

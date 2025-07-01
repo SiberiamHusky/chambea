@@ -111,7 +111,7 @@ export class AuthService {
       verificationCode: null,
       verificationCodeExpiry: null,
       email_verified: true,
-      account_status: AccountStatus.ACTIVE,
+      account_status: AccountStatus.PENDING_ROLE_SELECTION,
       updatedAt: new Date(),
     };
 
