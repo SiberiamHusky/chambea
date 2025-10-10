@@ -1,7 +1,8 @@
-import { AccountStatus, User } from 'src/modules/user/user.entity';
+import { AccountStatus } from 'src/shared/enums';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { User } from 'src/modules/user/user.entity';
 import { UserQueryService } from '../../user/user.query.service';
 
 @Injectable()

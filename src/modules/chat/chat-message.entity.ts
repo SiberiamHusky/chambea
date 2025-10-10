@@ -1,5 +1,4 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-// eslint-disable-next-line import/no-cycle
 import { User } from '../user/user.entity';
 
 @Entity()
@@ -13,11 +12,11 @@ export class ChatMessage {
   @Column()
   receiverId: string;
 
-  @ManyToOne(() => User, (user) => user.sentMessages, { eager: true })
+  @ManyToOne(() => User, { eager: true })
   @JoinColumn({ name: 'senderId' })
   sender: User;
 
-  @ManyToOne(() => User, (user) => user.receivedMessages, { eager: true })
+  @ManyToOne(() => User, { eager: true })
   @JoinColumn({ name: 'receiverId' })
   receiver: User;
 

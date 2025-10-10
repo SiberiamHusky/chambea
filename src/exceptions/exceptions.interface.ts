@@ -36,3 +36,11 @@ export interface IHttpForbiddenExceptionResponse {
   timestamp: string;
   traceId: string;
 }
+
+export interface IHttpNotFoundExceptionResponse {
+  code: number;
+  message: string;
+  description: string;
+  timestamp: string;
+  traceId: string;
+}

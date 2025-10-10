@@ -63,4 +63,15 @@ export class ExceptionConstants {
     RESOURCE_NOT_FOUND: 40004, // The requested resource could not be found
     TEMPORARILY_UNAVAILABLE: 40005, // The requested resource is temporarily unavailable
   };
+
+  /**
+   * Constants for not found HTTP error codes.
+   */
+  public static readonly NotFoundCodes = {
+    RESOURCE_NOT_FOUND: 50001, // The requested resource could not be found
+    ENDPOINT_NOT_FOUND: 50002, // The requested endpoint could not be found
+    USER_NOT_FOUND: 50003, // The requested user could not be found
+    COMPANY_NOT_FOUND: 50004, // The requested company could not be found
+    EMPLOYER_NOT_FOUND: 50005, // The requested employer could not be found
+  };
 }

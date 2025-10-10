@@ -24,6 +24,7 @@ import {
 } from './filters';
 import { AuthModule } from './modules/auth/auth.module';
 import { ChatModule } from './modules/chat/chat.module';
+import { EmployerModule } from './modules/employer/employer.module';
 import { GoogleStrategy } from './modules/auth/strategies/google.strategy';
 import { User } from './modules/user/user.entity';
 import { UserController } from './modules/user/user.controller';
@@ -61,6 +62,7 @@ import { WorkerModule } from './modules/worker/worker.module';
     UserModule,
     ChatModule,
     WorkerModule,
+    EmployerModule,
   ],
   controllers: [AppController, UserController],
   providers: [

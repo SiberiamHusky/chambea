@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 // eslint-disable-next-line sort-imports-es6-autofix/sort-imports-es6
-import { AccountStatus, User, UserType } from './user.entity';
+import { AccountStatus, UserType } from '../../shared/enums';
 import { InternalServerErrorException } from '../../exceptions';
+import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -73,7 +74,7 @@ export class UserQueryService {
     if (!user) {
       throw new BadRequestException('Usuario no encontrado.');
     }
-    if (user.user_type) {
+    if (user.user_type !== UserType.PENDING) {
       throw new BadRequestException('El usuario ya tiene un rol asignado.');
     }
     if (user.account_status !== AccountStatus.PENDING_ROLE_SELECTION) {
@@ -82,7 +83,7 @@ export class UserQueryService {
 
     await this.userRepository.update(userId, {
       user_type: role,
-      account_status: role === UserType.WORKER ? AccountStatus.PENDING_VERIFICATION : AccountStatus.ACTIVE,
+      account_status: AccountStatus.ACTIVE,
       updatedAt: new Date(),
     });
 

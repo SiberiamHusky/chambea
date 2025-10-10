@@ -36,7 +36,7 @@ export class Worker {
   rate_currency: string;
 
   @Column({ nullable: true })
-  base_location_address_id?: string;
+  base_location_address?: string;
 
   @Column({
     type: 'enum',

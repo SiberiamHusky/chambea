@@ -6,7 +6,8 @@ import { addMinutes } from 'date-fns';
 import { JwtUserPayload } from './interfaces/jwt-user-payload.interface';
 import { LoginReqDto, LoginResDto, SignupReqDto, SignupResDto } from './dtos';
 
-import { AccountStatus, User, UserType } from '../user/user.entity';
+import { AccountStatus, UserType } from '../../shared/enums';
+import { User } from '../user/user.entity';
 import { UserQueryService } from '../user/user.query.service';
 
 import { BadRequestException, UnauthorizedException } from '../../exceptions';

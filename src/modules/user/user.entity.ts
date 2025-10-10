@@ -1,23 +1,8 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-// eslint-disable-next-line import/no-cycle
-import { ChatMessage } from '../chat/chat-message.entity';
-import { DatabaseCollectionNames } from '../../shared/enums';
-
-export enum UserType {
-  WORKER = 'worker',
-  EMPLOYER = 'employer',
-  PENDING = 'pending',
-}
-
-export enum AccountStatus {
-  PENDING_ROLE_SELECTION = 'pending_role_selection',
-  PENDING_VERIFICATION = 'pending_verification',
-  ACTIVE = 'active',
-  SUSPENDED = 'suspended',
-  INACTIVE = 'inactive',
-}
+import { AccountStatus, DatabaseCollectionNames, UserType } from '../../shared/enums';
+// Removed import of ChatMessage to avoid dependency cycle with chat-message.entity
 
 @Index(['email'])
 @Entity({ name: DatabaseCollectionNames.USER })
@@ -123,9 +108,6 @@ export class User {
   @Column({ type: 'timestamp', nullable: true })
   last_login_date?: Date;
 
-  @OneToMany(() => ChatMessage, (message) => message.sender)
-  sentMessages: ChatMessage[];
-
-  @OneToMany(() => ChatMessage, (message) => message.receiver)
-  receivedMessages: ChatMessage[];
+  // Relations to ChatMessage are defined on ChatMessage side to avoid import cycles
+  // sentMessages and receivedMessages can be queried via ChatMessage entity
 }

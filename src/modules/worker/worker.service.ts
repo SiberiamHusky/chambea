@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserType } from '../user/user.entity';
+import { UserType } from '../../shared/enums';
 // eslint-disable-next-line sort-imports-es6-autofix/sort-imports-es6
 import { CreateWorkerProfileDto } from './dtos/create-worker-profile.dto';
 import { UserQueryService } from '../user/user.query.service';
