@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Ilustración de trabajo remoto">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ece4d4" />
+      <stop offset="1" stop-color="#f8f4ea" />
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22c1b1" />
+      <stop offset="1" stop-color="#0ea5a0" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="640" height="360" fill="url(#bg)"/>
+  <!-- Ventana -->
+  <rect x="360" y="70" width="220" height="150" rx="6" fill="#e7ecef" stroke="#cbd5e1"/>
+  <rect x="370" y="80" width="90" height="60" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+  <rect x="480" y="80" width="90" height="60" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+  <rect x="370" y="150" width="90" height="60" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+  <rect x="480" y="150" width="90" height="60" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+
+  <!-- Escritorio -->
+  <rect x="220" y="210" width="250" height="16" rx="8" fill="#374151" />
+  <rect x="240" y="226" width="14" height="60" fill="#1f2937" />
+  <rect x="420" y="226" width="14" height="60" fill="#1f2937" />
+
+  <!-- Persona izquierda (sentada en escritorio) -->
+  <circle cx="280" cy="170" r="20" fill="#0ea5a0" />
+  <rect x="265" y="190" width="30" height="35" rx="6" fill="url(#teal)" />
+  <rect x="285" y="205" width="25" height="10" rx="3" fill="#64748b" />
+  <rect x="305" y="190" width="36" height="24" rx="4" fill="#111827" />
+  <rect x="338" y="190" width="8" height="24" rx="2" fill="#4b5563" />
+  <rect x="275" y="225" width="16" height="8" rx="3" fill="#334155" />
+  <rect x="260" y="226" width="12" height="34" rx="3" fill="#334155" />
+
+  <!-- Persona derecha (en la ventana con laptop) -->
+  <circle cx="540" cy="195" r="18" fill="#0ea5a0" />
+  <rect x="520" y="210" width="40" height="28" rx="6" fill="#10b981" />
+  <rect x="533" y="218" width="30" height="14" rx="3" fill="#0f172a" />
+
+  <!-- Plantas y detalles -->
+  <circle cx="455" cy="240" r="8" fill="#22c55e" />
+  <circle cx="470" cy="230" r="10" fill="#22c55e" />
+  <rect x="448" y="250" width="20" height="16" rx="3" fill="#14532d" />
+
+  <!-- Decoración -->
+  <rect x="80" y="80" width="130" height="90" rx="8" fill="#ffffff" stroke="#e5e7eb"/>
+  <rect x="95" y="95" width="40" height="25" rx="4" fill="#cbd5e1" />
+  <rect x="140" y="95" width="55" height="55" rx="4" fill="#e7ecef" />
+
+  <!-- Suelo sombreado -->
+  <ellipse cx="345" cy="310" rx="250" ry="20" fill="#e5e7eb" />
+</svg>

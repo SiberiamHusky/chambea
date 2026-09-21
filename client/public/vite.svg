@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Chambea icon">
+  <title>Chambea C Icon</title>
+  <defs>
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#0f172a" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <g filter="url(#softShadow)">
+    <circle cx="32" cy="32" r="28" fill="#0b3b2a" />
+    <text x="32" y="40" text-anchor="middle" font-size="36" font-weight="700" fill="#ffffff" font-family="Inter, Segoe UI, Roboto, Arial, sans-serif">C</text>
+  </g>
+</svg>
